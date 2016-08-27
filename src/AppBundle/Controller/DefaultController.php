@@ -21,24 +21,4 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
         ));
     }
-
-    /**
-     * @Route("/add", name="repo_add")
-     */
-    public function addAction() {
-        try{
-            $client = new Client();
-
-            //token secret
-            
-
-            $repo = $client->api('repo')->create('repo', 'This is the description of a repo', 'http://maciejpiatek.pl', true);
-//            $emails = $client->api('me')->emails()->all();
-
-            var_dump($repo);
-            return Response::create('test');
-        }catch(Exception $e){
-            return Response::json(array('failed',$e->getMessage()));
-        }
-    }
 }

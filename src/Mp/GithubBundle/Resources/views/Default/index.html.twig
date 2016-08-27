@@ -1,1 +1,23 @@
-Hello World!
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% if app.session.flashBag.has('success') %}
+        <div class="alert alert-success">
+            {% for msg in app.session.flashBag.get('success') %}
+                {{ msg }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-4">
+            {%  include('MpGithubBundle:Default:navigation.html.twig') %}
+        </div>
+        <div class="col-md-8">
+            {% block content %}
+                <h2>Manage github repository</h2>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

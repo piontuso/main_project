@@ -6773,3 +6773,12 @@ button.close {
 .footer .text-center a:hover {
   color: #777;
 }
+.repo-list {
+  margin-top: 20px;
+}
+.repo-list .badge a {
+  text-decoration: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 10px;
+}

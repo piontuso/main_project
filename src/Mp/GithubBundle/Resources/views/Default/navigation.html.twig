@@ -1,0 +1,7 @@
+
+<ul class="nav nav-pills nav-stacked nav-pills-stacked-example">
+    <li role="presentation" class="{% if app.request.attributes.get('_route') == 'github' %}active{% endif %}"><a href="{{ path('github') }}">Home</a></li>
+    <li role="presentation" class="{% if app.request.attributes.get('_route') == 'github_add' %}active{% endif %}"><a href="{{ path('github_add') }}">Add file</a></li>
+    <li role="presentation" class="{% if app.request.attributes.get('_route') == 'github_merge' %}active{% endif %}"><a href="{{ path('github_merge') }}">Merge request</a></li>
+    <li role="presentation" class="{% if app.request.attributes.get('_route') == 'github_list' %}active{% endif %}"><a href="{{ path('github_list') }}">File list</a></li>
+</ul>

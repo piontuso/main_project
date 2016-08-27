@@ -1,0 +1,40 @@
+{% extends 'MpGithubBundle:Default:index.html.twig' %}
+
+{% block content %}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_row(form.branchName) }}
+    </div>
+
+    {{ form_row(form.create) }}
+    {{ form_end(form) }}
+
+
+    {% if form.vars.value.branchName is defined %}
+        {% set branch = form.vars.value.branchName|split('|') %}
+    {% endif %}
+
+    {% if items is defined %}
+        <div class="clearfix"></div>
+        <ul class="list-group repo-list">
+            {% for item in items %}
+                <li class="list-group-item">
+                    {% if item.type is defined and item.type == 'blob'  %}
+                        <a href="">{{ item.path }}</a>
+                        <span class="badge"><a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">edit</a></span>
+                        <span class="badge"><a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">remove</a></span>
+                        <span class="badge">F</span>
+                    {% else  %}
+                        <a href="">{{ item.path }}</a>
+                        <span class="badge"><a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">edit</a></span>
+                        <span class="badge"><a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">remove</a></span>
+                        <span class="badge">D</span>
+                    {% endif  %}
+                </li>
+            {% endfor  %}
+        </ul>
+    {% endif %}
+
+{% endblock %}
