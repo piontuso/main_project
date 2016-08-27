@@ -1,0 +1,4 @@
+services:
+#    mp_github.example:
+#        class: Mp\GithubBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
