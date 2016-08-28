@@ -22,15 +22,19 @@
             {% for item in items %}
                 <li class="list-group-item">
                     {% if item.type is defined and item.type == 'blob'  %}
+                        <i class="fa fa-file fa-2" aria-hidden="true"></i>
                         <a href="">{{ item.path }}</a>
-                        <span class="badge"><a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">edit</a></span>
-                        <span class="badge"><a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">remove</a></span>
-                        <span class="badge">F</span>
+                        <div class="pull-right">
+                            <a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-pencil-square-o fa-2" aria-hidden="true"></i></a>
+                            <a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-times fa-2" aria-hidden="true"></i></a>
+                        </div>
                     {% else  %}
+                        <i class="fa fa-folder fa-2" aria-hidden="true"></i>
                         <a href="">{{ item.path }}</a>
-                        <span class="badge"><a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">edit</a></span>
-                        <span class="badge"><a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">remove</a></span>
-                        <span class="badge">D</span>
+                        <div class="pull-right">
+                            <a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-pencil-square-o fa-2" aria-hidden="true"></i></a>
+                            <a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-times fa-2" aria-hidden="true"></i></a>
+                        </div>
                     {% endif  %}
                 </li>
             {% endfor  %}

@@ -35,9 +35,16 @@ class GithubFileType extends AbstractType
         ),
       ))
       ->add('create', SubmitType::class, array(
-        'label' => 'Create File',
-        'attr' => array('class' => 'btn btn-default'),
+        'label' => $options['button_label'],
+        'attr' => array('class' => 'btn btn-primary'),
       ));
+  }
+
+  public function configureOptions(OptionsResolver $resolver)
+  {
+    $resolver->setDefaults(array(
+      'button_label' => 'Create',
+    ));
   }
 
   public function getName()

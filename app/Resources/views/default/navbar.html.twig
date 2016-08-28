@@ -1,0 +1,7 @@
+<ul class="nav navbar-nav">
+    <li class="{% if app.request.attributes.get('_route') == 'about' %}active{% endif %}"><a href="{{ path('about') }}">O mnie</a></li>
+    <li class="{% if app.request.attributes.get('_route') == 'contact' %}active{% endif %}"><a href="{{ path('contact') }}">Kontakt</a></li>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <li class="{% if app.request.attributes.get('_route') == 'github' %}active{% endif %}"><a href="{{ path('github') }}">Github Tool</a></li>
+    {% endif %}
+</ul>

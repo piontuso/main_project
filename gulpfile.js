@@ -22,6 +22,8 @@ gulp.task('js', function () {
 gulp.task('css', function () {
     return gulp.src([
         'bower_components/bootstrap/dist/css/bootstrap.css',
+        'bower_components/components-font-awesome/css/font-awesome.css',
+        'app/Resources/public/css/**/*.css',
         'app/Resources/public/less/**/*.less'])
         .pipe(gulpif(/[.]less/, less()))
         .pipe(concat('styles.css'))
@@ -36,5 +38,12 @@ gulp.task('img', function() {
         .pipe(gulp.dest('public_html/img'));
 });
 
+// Fonts
+gulp.task('fonts', function() {
+    return gulp.src([
+        'bower_components/components-font-awesome/fonts/fontawesome-webfont.*'])
+        .pipe(gulp.dest('public_html/fonts'));
+});
+
 //define executable tasks when running "gulp" command
-gulp.task('default', ['js', 'css', 'img']);
+gulp.task('default', ['js', 'css', 'img', 'fonts']);

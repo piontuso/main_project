@@ -1,0 +1,12 @@
+{% include('default/header.html.twig') %}
+
+{% block fos_user_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-4">
+                {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+            </div>
+        </div>
+    </div>
+{% endblock fos_user_content %}
+{% include('default/footer.html.twig') %}
