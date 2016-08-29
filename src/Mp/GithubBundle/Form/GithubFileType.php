@@ -26,7 +26,10 @@ class GithubFileType extends AbstractType
     }
 
     $builder->add('fileName', TextType::class, array(
-      'attr' => array('class' => 'form-control'),
+      'attr' => array(
+        'class' => 'form-control',
+        'disabled' => $options['name_disabled'],
+      ),
     ))
       ->add('fileContent', TextareaType::class, array(
         'attr' => array(
@@ -44,6 +47,7 @@ class GithubFileType extends AbstractType
   {
     $resolver->setDefaults(array(
       'button_label' => 'Create',
+      'name_disabled' => FALSE,
     ));
   }
 

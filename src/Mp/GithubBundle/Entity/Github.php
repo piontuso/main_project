@@ -2,7 +2,6 @@
 
 namespace Mp\GithubBundle\Entity;
 
-
 use Github\Client;
 use Mp\GithubBundle\MpGithubBundle;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -23,7 +22,7 @@ class Github
       $container = $kernel->getContainer();
       $this->githubToken = $container->getParameter('github_token');
       $this->githubUser = $container->getParameter('github_user');
-      $this->defaultRepo = 'repo';
+      $this->defaultRepo = $container->getParameter('github_repo');
       $this->client->authenticate($this->githubToken, null, Client::AUTH_URL_TOKEN);
     }catch(Exception $e) {
       throw(new Exception('Cannot connect to github'));
@@ -50,9 +49,18 @@ class Github
     return $this->client->api('user')->all();
   }
 
-  public function getFile($file, $branch)
+  public function getFile($fileName, $branch)
   {
-    return $this->client->api('repo')->contents()->show($this->githubUser, $this->defaultRepo, $file, $branch);
+    $remoteFile = $this->client->api('repo')->contents()->show($this->githubUser, $this->defaultRepo, $fileName, $branch);
+
+    return $remoteFile;
+  }
+
+  public function fileExist($filePath, $branch)
+  {
+    $remoteFile = $this->client->api('repo')->contents()->exists($this->githubUser, $this->defaultRepo, $filePath, $branch);
+
+    return $remoteFile;
   }
 
   public function addFile($fileName, $fileContent, $branch)
@@ -105,8 +113,10 @@ class Github
   {
     try {
       $files = $this->client->api('git')->trees()->show($this->githubUser, $this->defaultRepo, $sha);
-    } catch(Exception $e) {
-      $files = array();
+    } catch(\Exception $e) {
+      $files = array(
+        'tree' => '',
+      );
     }
 
     return $files;
@@ -117,6 +127,13 @@ class Github
     $repo = $this->client->api('repo')->create($name, $description, $website, true);
 
     return $repo;
+  }
+
+  public function explodeBranchOption($branchOption, $index)
+  {
+    $branchName = explode("|", $branchOption);
+
+    return isset($branchName[$index]) ? $branchName[$index] : null;
   }
 
 }

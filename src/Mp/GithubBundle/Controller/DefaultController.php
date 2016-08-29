@@ -47,12 +47,23 @@ class DefaultController extends Controller
 
     if ($form->isValid()) {
 
-      $branchName = explode("|", $file->getBranchName());
-      $status = $github->addFile($file->getFileName(), $file->getFileContent(), $branchName[1]);
+      $branchName = $github->explodeBranchOption($file->getBranchName(), 1);
 
-      $request->getSession()
-        ->getFlashBag()
-        ->add('success', 'File has added with successfully to branch "' . $branchName[1] . '"!');
+      $fileStatus = $github->fileExist($file->getFileName(), $branchName);
+
+      if ($fileStatus) {
+        $request->getSession()
+          ->getFlashBag()
+          ->add('danger', 'File "' . $file->getFileName() . '" already exist in repository. Please specify another name.');
+      } else {
+        $status = $github->addFile($file->getFileName(), $file->getFileContent(), $branchName);
+
+        if ($status['commit']) {
+          $request->getSession()
+            ->getFlashBag()
+            ->add('success', 'File has added with successfully to branch "' . $branchName . '"!');
+        }
+      }
 
       return $this->redirectToRoute('github_add');
     }
@@ -69,27 +80,31 @@ class DefaultController extends Controller
   {
     $github = Github::getInstance();
     $localFile = new File();
+    // Get parameters.
     $file = $request->query->get('file');
     $branch = $request->query->get('branch');
     $sha = $request->query->get('sha');
+    // Get file content from repository.
     $remoteFile = $github->getFile($file, $branch);
     $content = base64_decode($remoteFile['content']);
+
     $localFile->setFileName($file);
     $localFile->setFileContent($content);
 
+    // Get form to update file.
     $form = $this->createForm(new GithubFileType(), $localFile, array(
       'button_label' => 'Update',
+      'name_disabled' => TRUE,
     ));
     $form->handleRequest($request);
-
 
     if ($form->isValid()) {
       $github->updateFile($file, $localFile->getFileContent(), 'Update file.', $sha, $branch);
       $request->getSession()
         ->getFlashBag()
-        ->add('success', 'File has updated with successfully to branch !');
+        ->add('success', 'File has updated with successfully !');
 
-      return $this->redirectToRoute('github_add');
+      return $this->redirectToRoute('github_list');
     }
 
     return $this->render('MpGithubBundle:Default:add.html.twig', array(
@@ -102,9 +117,20 @@ class DefaultController extends Controller
    */
   public function removeAction(Request $request)
   {
-    if (isset($_GET['sha']) && isset($_GET['file']) && isset($_GET['branch'])) {
+    // Get parameters.
+    $file = $request->query->get('file');
+    $branch = $request->query->get('branch');
+    $sha = $request->query->get('sha');
+
+    if (!empty($sha) && !empty($file) && !empty($branch)) {
       $github = Github::getInstance();
-      $status = $github->removeFile($_GET['file'], $_GET['sha'], $_GET['branch']);
+      $status = $github->removeFile($file, $sha, $branch);
+
+      if ($status['commit']) {
+        $request->getSession()
+          ->getFlashBag()
+          ->add('success', 'File has removed with successfully !');
+      }
 
       return $this->redirectToRoute('github_list');
     } else {
@@ -136,14 +162,14 @@ class DefaultController extends Controller
     $form->handleRequest($request);
 
     if ($form->isValid()) {
-      $head = $this->explodeBranchOption($pullRequest->getHead(), 1);
-      $base = $this->explodeBranchOption($pullRequest->getBase(), 1);
+      $head = $github->explodeBranchOption($pullRequest->getHead(), 1);
+      $base = $github->explodeBranchOption($pullRequest->getBase(), 1);
       $title = $pullRequest->getTitle();
       $body = $pullRequest->getBody();
       $github->createPullRequest($title, $body, $head, $base);
       $request->getSession()
         ->getFlashBag()
-        ->add('success', 'Pull request has created with successfully !');
+        ->add('success', 'Merge request has created with successfully !');
 
       return $this->redirectToRoute('github_merge');
     }
@@ -152,13 +178,6 @@ class DefaultController extends Controller
     return $this->render('MpGithubBundle:Default:merge.html.twig', array(
       'form' => $form->createView(),
     ));
-  }
-
-  private function explodeBranchOption($branchOption, $index)
-  {
-    $branchName = explode("|", $branchOption);
-
-    return isset($branchName[$index]) ? $branchName[$index] : null;
   }
 
   /**
@@ -182,15 +201,22 @@ class DefaultController extends Controller
       ))
       ->add('create', SubmitType::class, array(
         'label' => 'Show tree',
-        'attr' => array('class' => 'btn btn-default'),
+        'attr' => array('class' => 'btn btn-primary'),
       ))
       ->getForm();
 
     $form->handleRequest($request);
 
     if ($form->isValid()) {
-      $branchName = explode("|", $branch->getBranchName());
-      $tree = $github->filesTree($branchName[0]);
+      $branchSha = $github->explodeBranchOption($branch->getBranchName(), 0);
+      $branchName = $github->explodeBranchOption($branch->getBranchName(), 1);
+      $tree = $github->filesTree($branchSha);
+
+      if (empty($tree['tree'])) {
+        $request->getSession()
+          ->getFlashBag()
+          ->add('info', 'No files in repository on "'. $branchName .'".');
+      }
 
       return $this->render('MpGithubBundle:Default:list.html.twig', array(
         'form' => $form->createView(),

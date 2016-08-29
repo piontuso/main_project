@@ -23,7 +23,7 @@
                 <li class="list-group-item">
                     {% if item.type is defined and item.type == 'blob'  %}
                         <i class="fa fa-file fa-2" aria-hidden="true"></i>
-                        <a href="">{{ item.path }}</a>
+                        <a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}">{{ item.path }}</a>
                         <div class="pull-right">
                             <a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-pencil-square-o fa-2" aria-hidden="true"></i></a>
                             <a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-times fa-2" aria-hidden="true"></i></a>
@@ -31,14 +31,9 @@
                     {% else  %}
                         <i class="fa fa-folder fa-2" aria-hidden="true"></i>
                         <a href="">{{ item.path }}</a>
-                        <div class="pull-right">
-                            <a href="{{ path('github_update', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-pencil-square-o fa-2" aria-hidden="true"></i></a>
-                            <a href="{{ path('github_remove', {'sha': item.sha, 'file': item.path, 'branch': branch.1}) }}"><i class="fa fa-times fa-2" aria-hidden="true"></i></a>
-                        </div>
                     {% endif  %}
                 </li>
             {% endfor  %}
         </ul>
     {% endif %}
-
 {% endblock %}

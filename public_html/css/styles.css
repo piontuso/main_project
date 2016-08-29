@@ -9111,6 +9111,21 @@ button.close {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
   opacity: 1;
 }
+body {
+  font-family: 'Lato', sans-serif;
+}
+h1 {
+  font-size: 25px;
+}
+.navbar-default .navbar-brand {
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  color: #337ab7;
+  transition: color 0.5s ease;
+}
+.navbar-default .navbar-brand:hover {
+  color: #286090;
+}
 .footer {
   margin-top: 60px;
   width: 100%;

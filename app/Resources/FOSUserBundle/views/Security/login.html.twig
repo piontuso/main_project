@@ -5,23 +5,30 @@
             <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
         {% endif %}
         <div class="col-md-3 col-md-offset-5">
-            <form action="{{ path("fos_user_security_check") }}" method="post">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
-
-                <div class="form-group">
-                    <label for="username">{{ 'Username:'|trans({}, 'FOSUserBundle') }}</label>
-                    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required"/>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Login</h3>
                 </div>
+                <div class="panel-body">
+                    <form class="login-form" action="{{ path("fos_user_security_check") }}" method="post">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
 
-                <div class="form-group">
-                    <label for="password">{{ 'Password:'|trans({}, 'FOSUserBundle') }}</label>
-                    <input type="password" id="password" name="_password" required="required"/>
+                        <div class="form-group">
+                            <label for="username">{{ 'Username:'|trans({}, 'FOSUserBundle') }}</label>
+                            <input type="text" id="username" name="_username" value="{{ last_username }}" required="required"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">{{ 'Password:'|trans({}, 'FOSUserBundle') }}</label>
+                            <input type="password" id="password" name="_password" required="required"/>
+                        </div>
+
+                        <input type="submit" class="btn btn-primary pull-right" id="_submit" name="_submit"
+                               value="{{ 'Login'|trans({}, 'FOSUserBundle') }}"/>
+                    </form>
                 </div>
-
-                <input type="submit" class="btn btn-primary" id="_submit" name="_submit"
-                       value="{{ 'Login'|trans({}, 'FOSUserBundle') }}"/>
-            </form>
+            </div>
         </div>
-    </div>
+        </div>
 {% endblock fos_user_content %}
 {% include('default/footer.html.twig') %}

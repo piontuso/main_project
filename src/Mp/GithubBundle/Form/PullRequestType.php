@@ -41,8 +41,8 @@ class PullRequestType extends AbstractType
       ));
 
       $builder->add('merge', SubmitType::class, array(
-        'label' => 'Create Pull Request',
-        'attr' => array('class' => 'btn btn-default'),
+        'label' => 'Create Merge Request',
+        'attr' => array('class' => 'btn btn-primary'),
       ));
   }
 
