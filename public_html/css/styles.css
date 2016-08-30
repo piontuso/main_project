@@ -9117,6 +9117,12 @@ body {
 h1 {
   font-size: 25px;
 }
+.login-form label {
+  width: 30%;
+}
+.login-form input {
+  width: 60%;
+}
 .navbar-default .navbar-brand {
   font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
@@ -9125,6 +9131,9 @@ h1 {
 }
 .navbar-default .navbar-brand:hover {
   color: #286090;
+}
+.navbar-default .logged-name {
+  padding: 15px;
 }
 .footer {
   margin-top: 60px;

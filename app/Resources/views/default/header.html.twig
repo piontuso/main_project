@@ -23,9 +23,13 @@
                     {% include('default/navbar.html.twig') %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-3">
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+
                         <a class="btn btn-primary navbar-btn pull-right" href="{{ path('fos_user_security_logout') }}">
                             {{ 'Logout'|trans({}, 'FOSUserBundle') }}
                         </a>
+                        <div class="pull-right logged-name">
+                            Zalogowany jako: <b>{{ app.user.username }}</b>
+                        </div>
                     {% else %}
                         <a class="btn btn-primary navbar-btn pull-right"
                            href="{{ path('fos_user_security_login') }}">{{ 'Login'|trans({}, 'FOSUserBundle') }}</a>
